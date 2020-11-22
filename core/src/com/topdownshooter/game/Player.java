@@ -10,14 +10,10 @@ import com.badlogic.gdx.math.Vector2;
 import datastructures.Direction;
 
 public class Player {
-    Vector2 position = new Vector2(0, 0);
+    Vector2 position;
     Sprite sprite;
 
-    private Map map;
-
-    private float speed = 10f;
-    private float acceleration = 90;
-    private float maxSpeed = 10;
+    private final Map map;
 
     private float facing = Direction.right;
 
@@ -26,6 +22,8 @@ public class Player {
         sprite.setOriginCenter();
 
         this.map = map;
+
+        this.position = new Vector2( map.width / 2f,  map.height / 2f);
     }
 
     public void draw(SpriteBatch batch) {
@@ -66,11 +64,14 @@ public class Player {
     }
 
     private float calculateDistanceMoved(float deltaTime) {
+        float speed = 10f;
+        float acceleration = 90;
+        float maxSpeed = 10;
         return MathUtils.clamp(speed * acceleration * deltaTime, 0, maxSpeed);
     }
 
     private void handleCollisions(Vector2 velocity) {
-        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.tiledMap.getLayers().get("house");
+        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.tiledMap.getLayers().get("collision-layer");
 
         velocity.x = (velocity.x > 0) ?
                 handleCollisionRight(collisionLayer, velocity.x) :
