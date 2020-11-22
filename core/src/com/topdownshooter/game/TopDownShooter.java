@@ -28,8 +28,8 @@ public class TopDownShooter extends ApplicationAdapter {
         textureAtlas = new TextureAtlas("sprites.txt");
         hitman1 = textureAtlas.createSprite("Hitman 1/hitman1_gun");
 
-        player = new Player(hitman1);
         map = new Map(new TmxMapLoader().load("world.tmx"));
+        player = new Player(hitman1, map);
 
     }
 
@@ -39,13 +39,9 @@ public class TopDownShooter extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         float deltaTime = Gdx.graphics.getDeltaTime();
-        player.update(deltaTime);
-        constrainPlayerToMap();
 
-        camera.position.x = player.position.x;
-        camera.position.y = player.position.y;
-        constrainCameraToMap();
-        camera.update();
+        player.update(deltaTime);
+        updateCamera();
 
         map.render(camera);
         batch.setProjectionMatrix(camera.combined);
@@ -62,18 +58,11 @@ public class TopDownShooter extends ApplicationAdapter {
         map.dispose();
     }
 
-    private void constrainPlayerToMap() {
-        if (player.position.x < 0) {
-            player.position.x = 0;
-        } else if (player.position.x > map.width - player.sprite.getBoundingRectangle().width) {
-            player.position.x = map.width - player.sprite.getBoundingRectangle().width;
-        }
-
-        if (player.position.y < 0) {
-            player.position.y = 0;
-        } else if (player.position.y > map.height - player.sprite.getBoundingRectangle().height) {
-            player.position.y = map.height - player.sprite.getBoundingRectangle().height;
-        }
+    private void updateCamera() {
+        camera.position.x = player.position.x;
+        camera.position.y = player.position.y;
+        constrainCameraToMap();
+        camera.update();
     }
 
     private void constrainCameraToMap() {
