@@ -8,13 +8,16 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import interfaces.GameObject;
+
+import java.util.ArrayList;
 
 public class TopDownShooter extends ApplicationAdapter {
     OrthographicCamera camera;
     SpriteBatch batch;
     TextureAtlas textureAtlas;
-    Sprite hitman1;
 
+    ArrayList<GameObject> gameObjects = new ArrayList<>();
     Player player;
     Map map;
 
@@ -26,11 +29,14 @@ public class TopDownShooter extends ApplicationAdapter {
 
         batch = new SpriteBatch();
         textureAtlas = new TextureAtlas("sprites.txt");
-        hitman1 = textureAtlas.createSprite("Hitman 1/hitman1_gun");
+        Sprite hitman1 = textureAtlas.createSprite("Hitman 1/hitman1_gun");
+        Sprite manBrown = textureAtlas.createSprite("Man Brown/manBrown_gun");
 
         map = new Map(new TmxMapLoader().load("world.tmx"));
         player = new Player(hitman1, map);
 
+        gameObjects.add(player);
+        gameObjects.add(new Enemy(manBrown, map));
     }
 
     @Override
@@ -40,14 +46,19 @@ public class TopDownShooter extends ApplicationAdapter {
 
         float deltaTime = Gdx.graphics.getDeltaTime();
 
-        player.update(deltaTime);
+        for (GameObject gameObject : gameObjects) {
+            gameObject.update(deltaTime);
+        }
+
         updateCamera();
 
         map.render(camera);
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
-        player.draw(batch);
+        for (GameObject gameObject : gameObjects) {
+            gameObject.draw(batch);
+        }
         batch.end();
     }
 

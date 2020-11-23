@@ -8,8 +8,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import datastructures.Direction;
+import interfaces.GameObject;
 
-public class Player {
+public class Player implements GameObject {
     Vector2 position;
     Sprite sprite;
 
