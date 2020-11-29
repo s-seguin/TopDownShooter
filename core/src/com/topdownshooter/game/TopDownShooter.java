@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import interfaces.GameObject;
+import interfaces.Entity;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class TopDownShooter extends ApplicationAdapter {
     SpriteBatch batch;
     TextureAtlas textureAtlas;
 
-    ArrayList<GameObject> gameObjects = new ArrayList<>();
+    ArrayList<Entity> entities = new ArrayList<>();
     Player player;
     Map map;
 
@@ -35,8 +35,8 @@ public class TopDownShooter extends ApplicationAdapter {
         map = new Map(new TmxMapLoader().load("world.tmx"));
         player = new Player(hitman1, map);
 
-        gameObjects.add(player);
-        gameObjects.add(new Enemy(manBrown, map));
+        entities.add(player);
+        entities.add(new Enemy(manBrown, map));
     }
 
     @Override
@@ -46,8 +46,8 @@ public class TopDownShooter extends ApplicationAdapter {
 
         float deltaTime = Gdx.graphics.getDeltaTime();
 
-        for (GameObject gameObject : gameObjects) {
-            gameObject.update(deltaTime);
+        for (Entity entity : entities) {
+            entity.update(deltaTime);
         }
 
         updateCamera();
@@ -56,8 +56,8 @@ public class TopDownShooter extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
-        for (GameObject gameObject : gameObjects) {
-            gameObject.draw(batch);
+        for (Entity entity : entities) {
+            entity.draw(batch);
         }
         batch.end();
     }
@@ -70,8 +70,8 @@ public class TopDownShooter extends ApplicationAdapter {
     }
 
     private void updateCamera() {
-        camera.position.x = player.position.x;
-        camera.position.y = player.position.y;
+        camera.position.x = player.getPosition().x;
+        camera.position.y = player.getPosition().y;
         constrainCameraToMap();
         camera.update();
     }

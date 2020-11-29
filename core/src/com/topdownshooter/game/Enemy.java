@@ -3,27 +3,23 @@ package com.topdownshooter.game;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import interfaces.GameObject;
 
-public class Enemy implements GameObject {
-    Vector2 position;
-    Sprite sprite;
-
-    private final Map map;
-
+public class Enemy extends GameObject {
 
     public Enemy(Sprite sprite, Map map) {
-        this.sprite = sprite;
-        sprite.setOriginCenter();
-
-        this.map = map;
-
-        this.position = new Vector2( 100,  100);
+        super(new Vector2( 100,  100), sprite, map);
     }
 
     @Override
     public void update(float deltaTime) {
+        float x = (float) ((Math.random() > 0.5 ? 1 : -1) * Math.random()*10);
+        float y = (float) ((Math.random() > 0.5 ? 1 : -1) * Math.random()*10);
+        Vector2 velocity = new Vector2(x,y);
 
+        handleCollisions(velocity);
+
+        position.x += velocity.x;
+        position.y += velocity.y;
     }
 
     @Override
