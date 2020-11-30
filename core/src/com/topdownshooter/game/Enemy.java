@@ -3,18 +3,20 @@ package com.topdownshooter.game;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import interfaces.Entity;
+import java.util.ArrayList;
 
 public class Enemy extends GameObject {
 
-    public Enemy(Sprite sprite, Map map) {
-        super(new Vector2( 100,  100), sprite, map);
+    public Enemy(Sprite sprite, Map map, ArrayList<Entity> entities) {
+        super(new Vector2(100, 100), sprite, map, entities);
     }
 
     @Override
     public void update(float deltaTime) {
-        float x = (float) ((Math.random() > 0.5 ? 1 : -1) * Math.random()*10);
-        float y = (float) ((Math.random() > 0.5 ? 1 : -1) * Math.random()*10);
-        Vector2 velocity = new Vector2(x,y);
+        float x = (float) ((Math.random() > 0.5 ? 1 : -1) * Math.random() * 10);
+        float y = (float) ((Math.random() > 0.5 ? 1 : -1) * Math.random() * 10);
+        Vector2 velocity = new Vector2(x, y);
 
         handleCollisions(velocity);
 

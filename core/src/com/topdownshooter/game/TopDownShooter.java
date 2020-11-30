@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import interfaces.Entity;
-
 import java.util.ArrayList;
 
 public class TopDownShooter extends ApplicationAdapter {
@@ -33,10 +32,10 @@ public class TopDownShooter extends ApplicationAdapter {
         Sprite manBrown = textureAtlas.createSprite("Man Brown/manBrown_gun");
 
         map = new Map(new TmxMapLoader().load("world.tmx"));
-        player = new Player(hitman1, map);
+        player = new Player(hitman1, map, entities);
 
         entities.add(player);
-        entities.add(new Enemy(manBrown, map));
+        entities.add(new Enemy(manBrown, map, entities));
     }
 
     @Override

@@ -1,4 +1,5 @@
 package com.topdownshooter.game;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -6,19 +7,33 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import datastructures.Direction;
 import interfaces.Entity;
+import java.util.ArrayList;
+import java.util.UUID;
+
 
 public abstract class GameObject implements Entity {
+
     protected Vector2 position;
     protected Sprite sprite;
 
     protected Map map;
+    private final String id;
 
     protected float facing = Direction.right;
+    protected ArrayList<Entity> entities;
 
-    public GameObject(Vector2 position, Sprite sprite, Map map) {
+    public GameObject(Vector2 position, Sprite sprite, Map map, ArrayList<Entity> entities) {
         this.sprite = sprite;
         this.map = map;
         this.position = position;
+        this.entities = entities;
+
+        this.id = UUID.randomUUID().toString();
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
     @Override
@@ -56,14 +71,30 @@ public abstract class GameObject implements Entity {
     }
 
     protected void handleCollisions(Vector2 velocity) {
-        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.tiledMap.getLayers().get("collision-layer");
+        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.tiledMap.getLayers()
+            .get("collision-layer");
+
+        for (Entity e : entities) {
+            if (!e.getId().equals(id)) {
+                if (e.getBoundingRectangle().overlaps(
+                    new Rectangle(getBoundingRectangle().x + velocity.x, getBoundingRectangle().y,
+                        getBoundingRectangle().width, getBoundingRectangle().height))) {
+                    velocity.x = 0;
+                }
+                if (e.getBoundingRectangle().overlaps(
+                    new Rectangle(getBoundingRectangle().x, getBoundingRectangle().y + velocity.y,
+                        getBoundingRectangle().width, getBoundingRectangle().height))) {
+                    velocity.y = 0;
+                }
+            }
+        }
 
         velocity.x = (velocity.x > 0) ?
-                handleCollisionRight(collisionLayer, velocity.x) :
-                handleCollisionLeft(collisionLayer, velocity.x);
+            handleCollisionRight(collisionLayer, velocity.x) :
+            handleCollisionLeft(collisionLayer, velocity.x);
         velocity.y = (velocity.y > 0) ?
-                handleCollisionUp(collisionLayer, velocity.y) :
-                handleCollisionDown(collisionLayer, velocity.y);
+            handleCollisionUp(collisionLayer, velocity.y) :
+            handleCollisionDown(collisionLayer, velocity.y);
     }
 
     private float handleCollisionRight(TiledMapTileLayer collisionLayer, float xVelocity) {

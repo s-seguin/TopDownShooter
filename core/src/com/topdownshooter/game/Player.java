@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import datastructures.Direction;
+import interfaces.Entity;
+import java.util.ArrayList;
 
 public class Player extends GameObject {
 
-    public Player(Sprite sprite, Map map) {
-        super(new Vector2( map.width / 2f,  map.height / 2f), sprite, map);
+    public Player(Sprite sprite, Map map, ArrayList<Entity> entities) {
+        super(new Vector2(map.width / 2f, map.height / 2f), sprite, map, entities);
         sprite.setOriginCenter();
     }
 
